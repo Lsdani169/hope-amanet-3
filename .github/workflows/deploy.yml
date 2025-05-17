@@ -13,17 +13,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Instalează `unrar` pentru a extrage fișierele .rar
-      run: sudo apt-get install unrar
+    - name: Verifică fișierele din repository
+      run: |
+        ls -alh  # Vei vedea lista fișierelor, inclusiv dacă site.zip este acolo
 
-    - name: Extrage fișierele din site.rar
-      run: unrar x site.rar  # Înlocuiește "site.rar" cu numele fișierului tău .rar
+    - name: Instalează unzip pentru a extrage fișierele .zip
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y unzip
+
+    - name: Extrage fișierele din site.zip
+      run: unzip site.zip  # Înlocuiește "site.zip" cu numele fișierului tău .zip
 
     - name: Mută fișierele extrase în directorul principal
-      run: mv site/* ./  # Muta fișierele din folderul "site" (sau folderul creat la extragere) în root-ul repository-ului
+      run: mv site/* ./  # Muta fișierele din folderul "site" în root-ul repository-ului
 
     - name: Commit și push fișierele extrase
       run: |
         git add .
-        git commit -m "Extrase fișiere din site.rar"
+        git commit -m "Extrase fișiere din site.zip"
         git push origin main  # Asigură-te că faci push la ramura corectă
