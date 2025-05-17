@@ -1,0 +1,29 @@
+name: Extract and Deploy Site
+
+on:
+  push:
+    branches:
+      - main  # Sau ramura pe care o folosești pentru a face deploy
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Instalează `unrar` pentru a extrage fișierele .rar
+      run: sudo apt-get install unrar
+
+    - name: Extrage fișierele din site.rar
+      run: unrar x site.rar  # Înlocuiește "site.rar" cu numele fișierului tău .rar
+
+    - name: Mută fișierele extrase în directorul principal
+      run: mv site/* ./  # Muta fișierele din folderul "site" (sau folderul creat la extragere) în root-ul repository-ului
+
+    - name: Commit și push fișierele extrase
+      run: |
+        git add .
+        git commit -m "Extrase fișiere din site.rar"
+        git push origin main  # Asigură-te că faci push la ramura corectă
